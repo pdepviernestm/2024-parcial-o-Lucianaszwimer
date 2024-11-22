@@ -1,9 +1,72 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
+describe "group of tests for raley" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  test "Esta persona es adolescente" {
+    const persona = new Persona(anios=15)
+    assert.equals(true, persona.esAdolescente())
   }
 
+  test "Agregar emocion a una persona"{
+    const pers = new Persona(anios=13)
+    const alegria = new Alegria(intensidad=40)
+    const furia = new Furia(intensidad=40, palabrotas = ["boludo", "pt", "boludazo"])
+    pers.agregarEmocion(alegria)
+    pers.agregarEmocion(furia)
+    assert.equals([alegria, furia], pers.emociones())
+  }
+
+  test "Averiguar si está por explotar emocionalmente, lo que ocurre cuando todas las emociones de la persona pueden liberarse."{
+    const pers = new Persona(anios=13)
+    const alegria = new Alegria(intensidad=90)
+    const furia = new Furia(intensidad=90, palabrotas = ["boludo", "pt", "boludazo"])
+    pers.agregarEmocion(alegria)
+    pers.agregarEmocion(furia)
+    assert.equals(true, pers.estaPorExplotar())
+    }
+
+    test "Representar que una persona viva un evento, con las consecuencias que ello puede implicar."{
+      const pers = new Persona(anios=13)
+      const alegria = new Alegria(intensidad=90)
+      const furia = new Furia(intensidad=90, palabrotas = ["boludo", "pt", "boludazo"])
+      pers.agregarEmocion(alegria)
+      pers.agregarEmocion(furia)
+      const evento = new Evento(impacto=10, descripcion="shalom")
+      pers.liberarEmociones(evento)
+      assert.equals(80, alegria.intensidad())
+      assert.equals(["pt", "boludazo"], furia.palabrotas())
+    }
+
+    test "Permitir modificar el valor para considerar elevada la intensidad de las emociones"{
+      const furia = new Furia(intensidad=70, palabrotas = ["boludo", "pt", "boludazo"])
+      furia.modificarIntensidad(90)
+      assert.equals(true, furia.intensidadElevada())
+    }
+
+//item 6
+    test "Hacer que todos los integrantes de un grupo de personas vivan un mismo evento. "{
+      const pers1 = new Persona(anios=13)
+      const alegria = new Alegria(intensidad=90)
+      const furia = new Furia(intensidad=90, palabrotas = ["boludo", "pt", "boludazo"])
+      pers1.agregarEmocion(alegria)
+      pers1.agregarEmocion(furia)
+      const pers2 = new Persona(anios=13)
+      const alegria2 = new Alegria(intensidad=90)
+      const furia2 = new Furia(intensidad=90, palabrotas = ["boludo", "pt", "boludazo"])
+      pers2.agregarEmocion(alegria2)
+      pers2.agregarEmocion(furia2)
+      const evento = new Evento(impacto=10, descripcion="shalom")
+      const grupo = [pers1, pers2]
+      grupo.forEach({persona => persona.liberarEmociones(evento)})
+      assert.equals(80, alegria.intensidad())
+      assert.equals(["pt", "boludazo"], furia.palabrotas())
+      assert.equals(80, alegria2.intensidad())
+      assert.equals(["pt", "boludazo"], furia2.palabrotas())
+    }
+
+    test "absoluto"{
+      const alegria = new Alegria(intensidad=90)
+      alegria.modificarIntensidad(-10)
+      assert.equals(10, alegria.intensidad())
+    }
 }
